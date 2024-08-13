@@ -1,0 +1,15 @@
+[
+    {
+      "name": "TecnoCages",
+      "description": "I built a company portfolio to view their products and information about them, and added a contact section as well.",
+      "image": ["https://i.ibb.co/r68F7KQ/tecno.png"],
+      "url": "https://tecnoca.vercel.app/"
+    },
+    {
+        "name": "Cloths Ecommerce ",
+        "description": "I built an Ecommerce store to sell cloths with adding cart checkout and more features.",
+        "image": ["https://i.ibb.co/hmfKSSD/Littlelocals.png"],
+        "url": "https://ecommercecloths.vercel.app/",
+        "github":"https://github.com/sayed-54/little"
+    }
+  ]
