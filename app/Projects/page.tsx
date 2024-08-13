@@ -16,7 +16,7 @@ export default function Projects() {
                 {projects.map((project, index) => (
                     <div 
                         key={index} 
-                        className="flex flex-col overflow-hidden rounded-lg shadow-lg shadow-gray-400 dark:shadow-teal-900 bg-white dark:bg-gray-800 mt-12  transform transition-transform duration-300 hover:scale-105 hover:shadow-xl "
+                        className="flex flex-col overflow-hidden rounded-lg shadow-lg shadow-gray-300 dark:shadow-teal-800 bg-white dark:bg-gray-800 mt-12 hover:shadow-gray-400 dark:hover:shadow-teal-800  transform transition-transform duration-300 hover:scale-105 hover:shadow-xl "
                     >
                         <div className="relative w-full h-48">
                             <Image
