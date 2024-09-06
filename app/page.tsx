@@ -46,7 +46,7 @@ export default function Home() {
     </svg>
           </a>
           
-          <a href="https://www.linkedin.com/in/sayed-ali-s2024/" rel="noopener" target="_blank">
+          <a href="https://www.linkedin.com/in/sayed-ali-03bb2a326/" rel="noopener" target="_blank">
           <svg
       viewBox="0 0 1024 1024"
       fill="currentColor"

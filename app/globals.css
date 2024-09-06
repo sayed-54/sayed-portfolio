@@ -3,3 +3,16 @@
 @tailwind utilities;
 
 
+@keyframes rotateFrame {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .rotating-frame {
+    animation: rotateFrame 10s linear infinite;
+  }
+  
