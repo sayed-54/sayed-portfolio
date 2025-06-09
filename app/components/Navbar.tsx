@@ -8,7 +8,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Themebutton from './Themebutton';
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const mobileMenuVariants = {
@@ -41,29 +41,44 @@ const linkVariants = {
 
 export default function Navbar() {
   const pathname = usePathname() || '/';
+  const [isOpen, setIsOpen] = useState(false);
+  const disclosureRef = useRef<HTMLDivElement>(null);
 
+  // Close menu on scroll, but ignore scrolls for 200ms after opening
   useEffect(() => {
-    const handleScroll = () => {
-      const toggleButton = document.querySelector(
-        '[aria-controls]'
-      ) as HTMLElement | null;
-      const isOpen = toggleButton?.getAttribute('aria-expanded') === 'true';
+    if (!isOpen) return;
 
-      if (isOpen) toggleButton?.click();
+    let ignoreScroll = true;
+    const timeout = setTimeout(() => {
+      ignoreScroll = false;
+    }, 500); // ignore scroll events for 200ms after open
+
+    const handleScroll = () => {
+      if (isOpen && !ignoreScroll) setIsOpen(false);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isOpen]);
 
-  const closeMobileMenu = () => {
-    const toggleButton = document.querySelector(
-      '[aria-controls]'
-    ) as HTMLElement | null;
-    if (toggleButton?.getAttribute('aria-expanded') === 'true') {
-      toggleButton?.click();
-    }
-  };
+  // Close menu on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isOpen &&
+        disclosureRef.current &&
+        !disclosureRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
 
   const navLinkClass = (href: string) =>
     pathname === href
@@ -80,9 +95,11 @@ export default function Navbar() {
   return (
     <Disclosure
       as="nav"
-      className="sticky top-0 z-50 backdrop-blur-sm bg-white/60 dark:bg-gray-900/60 border-b border-gray-200 dark:border-gray-700 shadow-sm"
+      className="sticky top-0 z-50 backdrop-blur-sm bg-white/90 dark:bg-gray-900/90 border-b border-gray-200 dark:border-gray-700 shadow-sm relative"
+      ref={disclosureRef}
+      defaultOpen={false}
     >
-      {({ open }) => (
+      {() => (
         <>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16 items-center">
@@ -112,8 +129,12 @@ export default function Navbar() {
                 <DisclosureButton
                   className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-teal-600 hover:bg-gray-200
                     dark:text-gray-400 dark:hover:text-teal-400 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsOpen(!isOpen);
+                  }}
                 >
-                  {open ? (
+                  {isOpen ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6"
@@ -144,7 +165,7 @@ export default function Navbar() {
 
           {/* Mobile Menu with framer-motion animation */}
           <AnimatePresence initial={false}>
-            {open && (
+            {isOpen && (
               <DisclosurePanel
                 as={motion.div}
                 static
@@ -152,7 +173,8 @@ export default function Navbar() {
                 animate="visible"
                 exit="exit"
                 variants={mobileMenuVariants}
-                className="sm:hidden px-4 pt-4 pb-6 space-y-4 overflow-hidden bg-white/70 dark:bg-gray-900/70 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 rounded-b-md shadow-sm"
+                className="sm:hidden px-4 pt-4 pb-6 space-y-4 overflow-visible bg-white dark:bg-gray-900 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 rounded-b-md shadow-sm z-50 relative"
+                style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
               >
                 {[
                   { href: '/', label: 'Home' },
@@ -163,7 +185,7 @@ export default function Navbar() {
                     <Link
                       href={href}
                       prefetch
-                      onClick={closeMobileMenu}
+                      onClick={() => setIsOpen(false)}
                       className={mobileLinkClass(href)}
                     >
                       {label}
