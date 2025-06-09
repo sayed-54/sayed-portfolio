@@ -9,11 +9,11 @@ import { FaSquareWhatsapp } from "react-icons/fa6";
 export default function Home() {
   return (
     <div className="divide-y divide-teal-300 dark:divide-gray-700">
-      <div className="space-y-2 pt-5 pb-8 md:space-x-5">
+      {/* <div className="space-y-2 pt-5 pb-8 md:space-x-5">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-10">
         Home
         </h1>
-    </div>
+    </div> */}
 
     <div className=" items-center space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-3 xl:space-y-0">
 

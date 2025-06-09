@@ -1,165 +1,180 @@
-"use client";
+'use client';
 
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import Themebutton from "./Themebutton";
-import { useEffect, useRef } from "react";
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from '@headlessui/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import Themebutton from './Themebutton';
+import { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const mobileMenuVariants = {
+  hidden: { opacity: 0, y: -10, pointerEvents: 'none' as const, height: 0 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    pointerEvents: 'auto' as const,
+    height: 'auto',
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.1,
+      duration: 0.25,
+      ease: 'easeOut',
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -10,
+    pointerEvents: 'none' as const,
+    height: 0,
+    transition: { duration: 0.2, ease: 'easeIn' },
+  },
+};
+
+const linkVariants = {
+  hidden: { opacity: 0, x: -10 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.3, ease: 'easeOut' } },
+};
 
 export default function Navbar() {
-    let pathname = usePathname() || "/";
-    const disclosurePanelRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname() || '/';
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (disclosurePanelRef.current && disclosurePanelRef.current.classList.contains('open')) {
-                const handle = () => {
-                    disclosurePanelRef.current?.classList.remove('open');
-                    disclosurePanelRef.current?.classList.add('close');
-                }
-                handle();
-            }
-        };
+  useEffect(() => {
+    const handleScroll = () => {
+      const toggleButton = document.querySelector(
+        '[aria-controls]'
+      ) as HTMLElement | null;
+      const isOpen = toggleButton?.getAttribute('aria-expanded') === 'true';
 
-        window.addEventListener("scroll", handleScroll);
+      if (isOpen) toggleButton?.click();
+    };
 
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    return (
-        <Disclosure as="nav" className="relative">
-            {({ open }) => (
-                <>
-                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="flex justify-between h-16">
-                            <div className="justify-between flex w-full">
-                                {/* Navbar Title */}
-                                <div className="flex items-center md:justify-start justify-center">
-                                    <Link href="/">
-                                        <h1 className="text-4xl font-bold">
-                                            Sayed <span className="text-teal-500">Ali</span>
-                                        </h1>
-                                    </Link>
-                                </div>
-                                {/* Navbar Items */}
-                                <div className="hidden sm:ml-6 sm:flex sm:space-x-8 sm:items-center">
-                                    <Link
-                                        href="/"
-                                        prefetch
-                                        className={`${pathname === "/"
-                                            ? "border-teal-500 dark:text-white h-full inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium"
-                                            : "border-transparent text-gray-500 dark:text-gray-300 dark:hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium "}`}
-                                    >
-                                        Home
-                                    </Link>
-                                    <Link
-                                        href="/Projects"
-                                        prefetch
-                                        className={`${pathname === "/Projects"
-                                            ? "border-teal-500 dark:text-white h-full inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium"
-                                            : "border-transparent text-gray-500 dark:text-gray-300 dark:hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium "}`}
-                                    >
-                                        Projects
-                                    </Link>
-                                    <Link
-                                        href="/Contact"
-                                        prefetch
-                                        className={`${pathname === "/Contact"
-                                            ? "border-teal-500 dark:text-white h-full inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium"
-                                            : "border-transparent text-gray-500 dark:text-gray-300 dark:hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-lg font-medium "}`}
-                                    >
-                                        Contact
-                                    </Link>
-                                    <Themebutton />
-                                </div>
-                            </div>
+  const closeMobileMenu = () => {
+    const toggleButton = document.querySelector(
+      '[aria-controls]'
+    ) as HTMLElement | null;
+    if (toggleButton?.getAttribute('aria-expanded') === 'true') {
+      toggleButton?.click();
+    }
+  };
 
-                            <div className="-mr-2 flex items-center sm:hidden">
-                                <DisclosureButton
-                                    className="inline-flex items-center justify-center p-2 rounded-md mx-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none 
-                                     focus:ring-2 focus:ring-inset focus:ring-teal-500 dark:hover:bg-gray-800"
-                                >
-                                    {open ? (
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={1.5}
-                                            stroke="currentColor"
-                                            className="size-6"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M6 18 18 6M6 6l12 12"
-                                            />
-                                        </svg>
-                                    ) : (
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={1.5}
-                                            stroke="currentColor"
-                                            className="size-8"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                                            />
-                                        </svg>
-                                    )}
-                                </DisclosureButton>
-                                <Themebutton />
-                            </div>
-                        </div>
-                    </div>
+  const navLinkClass = (href: string) =>
+    pathname === href
+      ? `relative text-teal-500 dark:text-teal-400 inline-flex items-center px-3 pt-1.5 pb-2 text-lg font-semibold transition 
+         after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-teal-500 dark:after:bg-teal-400`
+      : `relative text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 inline-flex items-center px-3 pt-1.5 pb-2 text-lg font-medium transition
+         after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:bg-teal-500 dark:after:bg-teal-400 after:rounded-full after:transition-all hover:after:w-full`;
 
-                    <DisclosurePanel
-                        ref={disclosurePanelRef}
-                        className={`sm:hidden transition-transform duration-500 ease-in-out transform ${
-                            open ? "translate-y-0 opacity-100 border border-gray-200 dark:border-gray-700" : "translate-y-[-100%] opacity-0"
-                        }`}
+  const mobileLinkClass = (href: string) =>
+    pathname === href
+      ? 'block bg-teal-100 dark:bg-gray-800 text-teal-700 dark:text-teal-400 pl-3 pr-4 py-2 text-xl font-semibold rounded-md'
+      : 'block text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 pl-3 pr-4 py-2 text-lg font-medium transition-colors duration-200 rounded-md';
+
+  return (
+    <Disclosure
+      as="nav"
+      className="sticky top-0 z-50 backdrop-blur-sm bg-white/60 dark:bg-gray-900/60 border-b border-gray-200 dark:border-gray-700 shadow-sm"
+    >
+      {({ open }) => (
+        <>
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16 items-center">
+              {/* Logo */}
+              <Link href="/">
+                <h1 className="text-4xl font-extrabold cursor-pointer select-none tracking-tight">
+                  Sayed <span className="text-teal-500">Ali</span>
+                </h1>
+              </Link>
+
+              {/* Desktop Nav */}
+              <div className="hidden sm:flex sm:space-x-8 sm:items-center">
+                <Link href="/" prefetch className={navLinkClass('/')}>
+                  Home
+                </Link>
+                <Link href="/Projects" prefetch className={navLinkClass('/Projects')}>
+                  Projects
+                </Link>
+                <Link href="/Contact" prefetch className={navLinkClass('/Contact')}>
+                  Contact
+                </Link>
+                <Themebutton />
+              </div>
+
+              {/* Mobile Toggle */}
+              <div className="sm:hidden flex items-center gap-2">
+                <DisclosureButton
+                  className="inline-flex items-center justify-center p-2 rounded-md text-gray-500 hover:text-teal-600 hover:bg-gray-200
+                    dark:text-gray-400 dark:hover:text-teal-400 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-teal-500"
+                >
+                  {open ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
                     >
-                        <div className="pt-2 pb-3 space-y-1">
-                            <Link
-                                href="/"
-                                prefetch
-                                className={`${pathname === "/"
-                                    ? 'bg-teal-50 border-teal-500 text-teal-500 block pl-3 pr-4 py-2 border-l-4 text-xl font-medium dark:bg-gray-800'
-                                    : 'border-transparent dark:text-white text-gray-700 hover:bg-gray-50 hover:border-gray-300 hover:font-medium hover:text-black block pl-3 pr-4 py-2 dark:hover:bg-gray-700 border-l-4 text-lg font-medium hover:dark:text-white'} `}
-                            >
-                                Home
-                            </Link>
-                        </div>
-                        <div className="pt-2 pb-3 space-y-1">
-                            <Link
-                                href="/Projects"
-                                prefetch
-                                className={`${pathname === "/Projects"
-                                    ? 'bg-teal-50 border-teal-500 text-teal-500 block pl-3 pr-4 py-2 border-l-4 text-xl font-medium dark:bg-gray-800'
-                                    : 'border-transparent dark:text-white text-gray-700 hover:bg-gray-50 hover:border-gray-300 hover:font-medium hover:text-black block pl-3 pr-4 py-2 dark:hover:bg-gray-700 border-l-4 text-lg font-medium hover:dark:text-white'} `}
-                            >
-                                Projects
-                            </Link>
-                        </div>
-                        <div className="pt-2 pb-3 space-y-1">
-                            <Link
-                                href="/Contact"
-                                prefetch
-                                className={`${pathname === "/Contact"
-                                    ? 'bg-teal-50 border-teal-500 text-teal-500 block pl-3 pr-4 py-2 border-l-4 text-xl font-medium dark:bg-gray-800'
-                                    : 'border-transparent dark:text-white text-gray-700 hover:bg-gray-50 hover:border-gray-300 hover:font-medium hover:text-black block pl-3 pr-4 py-2 dark:hover:bg-gray-700 border-l-4 text-lg font-medium hover:dark:text-white'} `}
-                            >
-                                Contact
-                            </Link>
-                        </div>
-                    </DisclosurePanel>
-                </>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-8 w-8"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                  )}
+                </DisclosureButton>
+                <Themebutton />
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Menu with framer-motion animation */}
+          <AnimatePresence initial={false}>
+            {open && (
+              <DisclosurePanel
+                as={motion.div}
+                static
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={mobileMenuVariants}
+                className="sm:hidden px-4 pt-4 pb-6 space-y-4 overflow-hidden bg-white/70 dark:bg-gray-900/70 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 rounded-b-md shadow-sm"
+              >
+                {[
+                  { href: '/', label: 'Home' },
+                  { href: '/Projects', label: 'Projects' },
+                  { href: '/Contact', label: 'Contact' },
+                ].map(({ href, label }) => (
+                  <motion.div key={href} variants={linkVariants} className="w-full">
+                    <Link
+                      href={href}
+                      prefetch
+                      onClick={closeMobileMenu}
+                      className={mobileLinkClass(href)}
+                    >
+                      {label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </DisclosurePanel>
             )}
-        </Disclosure>
-    );
+          </AnimatePresence>
+        </>
+      )}
+    </Disclosure>
+  );
 }
