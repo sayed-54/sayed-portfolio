@@ -1,15 +1,17 @@
 [
-    {
-      "name": "TecnoCages",
-      "description": "I built a company portfolio to view their products and information about them, and added a contact section as well.",
-      "image": ["https://i.ibb.co/r68F7KQ/tecno.png"],
-      "url": "https://www.tecnocages.com/"
-    },
-    {
-        "name": "Cloths Ecommerce ",
-        "description": "I built an Ecommerce store to sell cloths with adding cart checkout and more features.",
-        "image": ["https://i.ibb.co/hmfKSSD/Littlelocals.png"],
-        "url": "https://ecommercecloths.vercel.app/",
-        "github":"https://github.com/sayed-54/little"
-    }
-  ]
+  {
+    "name": "TecnoCages",
+    "description": "A portfolio site for a cage manufacturer to showcase their product catalog and contact info.",
+    "image": ["https://i.ibb.co/r68F7KQ/tecno.png"],
+    "url": "https://www.tecnocages.com/",
+    "tools": ["nextjs", "tailwind", "formspree"]
+  },
+  {
+    "name": "Cloths Ecommerce",
+    "description": "Ecommerce store with cart, checkout, product management, and Sanity CMS integration.",
+    "image": ["https://i.ibb.co/hmfKSSD/Littlelocals.png"],
+    "url": "https://ecommercecloths.vercel.app/",
+    "github": "https://github.com/sayed-54/little",
+    "tools": ["Nextjs", "Tailwind", "Sanity"]
+  }
+]

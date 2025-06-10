@@ -51,7 +51,7 @@ export default function Navbar() {
     let ignoreScroll = true;
     const timeout = setTimeout(() => {
       ignoreScroll = false;
-    }, 500); // ignore scroll events for 200ms after open
+    }, 1000); // ignore scroll events for 200ms after open
 
     const handleScroll = () => {
       if (isOpen && !ignoreScroll) setIsOpen(false);
