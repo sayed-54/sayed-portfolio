@@ -4,7 +4,7 @@
     "description": "A portfolio site for a cage manufacturer to showcase their product catalog and contact info.",
     "image": ["https://i.ibb.co/r68F7KQ/tecno.png"],
     "url": "https://www.tecnocages.com/",
-    "tools": ["nextjs", "tailwind", "formspree"]
+    "tools": ["nextjs", "tailwind", "formspree","Sanity"]
   },
   {
     "name": "Cloths Ecommerce",
