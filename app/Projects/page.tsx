@@ -37,13 +37,13 @@ const techIcons: Record<string, JSX.Element> = {
 
 export default function Projects() {
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-20 bg-white dark:bg-black">
+    <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-10">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         viewport={{ once: true }}
-        className="text-4xl font-bold text-center text-gray-900 dark:text-white mb-16"
+        className="text-4xl font-bold text-center text-slate-900 dark:text-slate-100 mb-12"
       >
         Featured Projects
       </motion.h2>
@@ -64,7 +64,7 @@ export default function Projects() {
                 ease: "easeInOut",
               },
             }}
-            className="relative group rounded-3xl border border-gray-200 dark:border-gray-800 overflow-hidden bg-white dark:bg-gray-900 shadow-lg transition-all duration-300"
+            className="relative group rounded-3xl border border-slate-200/70 dark:border-slate-800/60 overflow-hidden bg-white/70 dark:bg-slate-950/60 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.55)] transition-all duration-300 backdrop-blur"
           >
             {/* Animated glowing gradient border */}
             <div className="absolute inset-0 z-0 rounded-3xl before:absolute before:inset-0 before:rounded-3xl before:bg-[conic-gradient(at_top_left,_#00f0ff,transparent,_#00f0ff)] before:opacity-0 before:transition-opacity before:duration-500 group-hover:before:opacity-100 before:animate-spin-slow pointer-events-none" />
@@ -80,11 +80,11 @@ export default function Projects() {
             </div>
 
             <div className="p-6 flex flex-col gap-4 relative z-10">
-              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
                 {project.name}
               </h3>
 
-              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                 {project.description}
               </p>
 
@@ -95,7 +95,7 @@ export default function Projects() {
                     return (
                       <div
                         key={tool}
-                        className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full text-sm text-gray-600 dark:text-gray-300"
+                        className="flex items-center gap-1 bg-slate-100/80 dark:bg-slate-900/70 px-2 py-1 rounded-full text-sm text-slate-600 dark:text-slate-300"
                       >
                         {techIcons[key]}
                         <span>{tool}</span>

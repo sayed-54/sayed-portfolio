@@ -72,7 +72,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen px-6 pt-8 pb-12 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <main className="min-h-screen py-8 sm:py-10 text-slate-900 dark:text-slate-100">
       <section className="max-w-4xl mx-auto text-center space-y-6">
         <ProfileWithBorder />
         <h1 className="text-5xl font-extrabold tracking-tight">
@@ -104,7 +104,7 @@ export default function Home() {
       </section>
 
       {/* About Me */}
-      <section className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 mb-12">
+      <section className="max-w-3xl mx-auto rounded-2xl border border-slate-200/70 bg-white/70 p-8 shadow-sm backdrop-blur dark:border-slate-800/60 dark:bg-slate-900/60 mb-12">
         <h2 className="text-3xl font-bold mb-4 text-center">About Me</h2>
         <ul className="list-disc list-inside space-y-3 text-gray-700 dark:text-gray-300 text-lg">
           <li>Passionate about writing <span className="text-teal-500 font-semibold">clean, maintainable code</span> that scales.</li>
@@ -118,11 +118,11 @@ export default function Home() {
       {/* Skills */}
       <section className="max-w-4xl mx-auto mb-12">
         <h2 className="text-3xl font-bold mb-6 text-center">My Skills</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 max-w-lg mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-lg mx-auto">
           {skills.map(({ name, icon }) => (
             <div
               key={name}
-              className="flex flex-col items-center gap-2 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition transform hover:scale-105"
+              className="flex flex-col items-center gap-2 rounded-xl border border-slate-200/60 bg-white/70 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800/60 dark:bg-slate-900/60"
               tabIndex={0}
               aria-label={name}
             >
@@ -151,7 +151,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials with animation */}
-      <section className="max-w-3xl mx-auto mb-12 bg-white dark:bg-gray-800 rounded-lg  pt-8 shadow-md">
+      <section className="max-w-3xl mx-auto mb-12 rounded-2xl border border-slate-200/70 bg-white/70 pt-8 shadow-sm backdrop-blur dark:border-slate-800/60 dark:bg-slate-900/60">
         <h2 className="text-3xl font-bold mb-6 text-center">Testimonials</h2>
         <div className="relative h-40 overflow-hidden">
           <AnimatePresence initial={false} custom={direction}>
