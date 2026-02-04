@@ -138,3 +138,28 @@
 .animate-fade-in {
   animation: fade-in 0.5s ease-out;
 }
+
+/* ====== Aurora background ====== */
+.aurora-layer {
+  position: absolute;
+  inset: -20%;
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  filter: blur(80px) saturate(1.25);
+  mix-blend-mode: screen;
+  animation: aurora-shift 18s ease-in-out infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes aurora-shift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, calc(var(--aurora-amplitude, 1.7) * -20px), 0)
+      scale(1.1);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
