@@ -95,7 +95,7 @@ export default function Navbar() {
   return (
     <Disclosure
       as="nav"
-      className="sticky top-0 z-50 backdrop-blur-sm bg-white/90 dark:bg-gray-900/90 border-b border-gray-200 dark:border-gray-700 shadow-sm relative"
+      className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/70 shadow-[0_12px_40px_-30px_rgba(15,23,42,0.5)] backdrop-blur-xl dark:border-slate-800/60 dark:bg-slate-950/70 relative"
       ref={disclosureRef}
       defaultOpen={false}
     >
@@ -173,7 +173,7 @@ export default function Navbar() {
                 animate="visible"
                 exit="exit"
                 variants={mobileMenuVariants}
-                className="sm:hidden px-4 pt-4 pb-6 space-y-4 overflow-visible bg-white dark:bg-gray-900 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 rounded-b-md shadow-sm z-50 relative"
+                className="sm:hidden px-4 pt-4 pb-6 space-y-4 overflow-visible bg-white/75 dark:bg-slate-950/70 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800/60 rounded-b-2xl shadow-[0_12px_40px_-30px_rgba(15,23,42,0.5)] z-50 relative"
                 style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
               >
                 {[
