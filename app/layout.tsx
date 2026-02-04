@@ -27,9 +27,9 @@ export default function RootLayout({
           <div className="relative min-h-screen overflow-hidden">
             <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
               <Aurora
-                colorStops={["#5227FF", "#7cff67", "#652020", "#d4f23a"]}
-                amplitude={1.7}
-                blend={0.55}
+                colorStops={["#0ea5e9", "#22c55e", "#8b5cf6", "#14b8a6"]}
+                amplitude={1.9}
+                blend={0.6}
               />
             </div>
             <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10">

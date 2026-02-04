@@ -15,9 +15,9 @@ export default function Aurora({
 }: AuroraProps) {
   const gradient = colorStops
     .map((color, index) => {
-      const x = 20 + index * 20;
-      const y = index % 2 === 0 ? 30 : 65;
-      return `radial-gradient(60% 60% at ${x}% ${y}%, ${color} 0%, transparent 60%)`;
+      const x = 15 + index * 18;
+      const y = index % 2 === 0 ? 25 : 70;
+      return `radial-gradient(55% 55% at ${x}% ${y}%, ${color} 0%, transparent 62%)`;
     })
     .join(", ");
 
@@ -27,5 +27,10 @@ export default function Aurora({
     "--aurora-amplitude": `${amplitude}`,
   } as CSSProperties;
 
-  return <div className={`aurora-layer ${className}`} style={style} />;
+  return (
+    <div className={`aurora ${className}`}>
+      <div className="aurora-layer" style={style} />
+      <div className="aurora-layer aurora-layer--secondary" style={style} />
+    </div>
+  );
 }
