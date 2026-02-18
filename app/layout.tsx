@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Providers from "./components/Providers";
 import Footer from "./components/Footer";
-import Aurora from "./components/Aurora";
+import FloatingLines from "./components/FloatingLines";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,20 +20,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-white text-black dark:bg-[#090908] dark:text-white h-full selection:bg-gray-300 
+      <body className={`${inter.className} bg-white text-black dark:bg-[#030303] dark:text-white h-full selection:bg-gray-300 
       dark:selection:bg-gray-300/15`}>
         <Providers>
           <Navbar />
-          <div className="relative min-h-screen overflow-hidden">
-            <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-              <Aurora
-                colorStops={["#0ea5e9", "#22c55e", "#8b5cf6", "#14b8a6"]}
-                amplitude={1.9}
-                blend={0.6}
+          <div className="relative min-h-screen">
+            <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+               <FloatingLines
+                linesGradient={["#E945F5", "#2F4BC0", "#E945F5", "#ffffff", "#f00a0a"]}
+                animationSpeed={1}
+                interactive
+                bendRadius={5}
+                bendStrength={-0.5}
+                mouseDamping={0.03}
+                parallax
+                parallaxStrength={0.45}
               />
             </div>
-            <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10">
-              <div className="rounded-3xl border border-slate-200/70 bg-slate-50/80 p-6 text-slate-900 shadow-[0_22px_70px_-46px_rgba(15,23,42,0.55)] backdrop-blur-lg dark:border-slate-800/60 dark:bg-slate-950/60 dark:text-slate-100 sm:p-8">
+            <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-20">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-6 text-slate-900 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] backdrop-blur-xl dark:border-white/10 dark:bg-black/40 dark:text-slate-100 sm:p-8">
                 {children}
               </div>
             </main>

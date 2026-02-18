@@ -1,12 +1,18 @@
-'use client';
-
-import React from 'react';
+"use client";
+import { useEffect, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
-import { FaXTwitter ,FaWhatsapp } from "react-icons/fa6";
-
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FaXTwitter, FaWhatsapp } from "react-icons/fa6";
+import { client } from '@/lib/sanity.client';
+import { profileQuery } from '@/lib/sanity.queries';
 
 const Footer = () => {
+  const [profile, setProfile] = useState<any>(null);
+  
+  useEffect(() => {
+    client.fetch(profileQuery).then(setProfile).catch(console.error);
+  }, []);
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
@@ -51,7 +57,7 @@ const Footer = () => {
       <p className="tracking-wide mb-4">
         &copy; {new Date().getFullYear()}{" "}
         <span className="font-semibold text-gray-700 dark:text-gray-300">
-          Sayed Ali
+          {profile?.name || "Sayed Ali"}
         </span>
         . Built with{" "}
         <span className="font-medium text-teal-500 dark:text-teal-400">

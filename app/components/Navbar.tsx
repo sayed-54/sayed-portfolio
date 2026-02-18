@@ -10,6 +10,8 @@ import { usePathname } from 'next/navigation';
 import Themebutton from './Themebutton';
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { client } from '../../lib/sanity.client';
+import { profileQuery } from '../../lib/sanity.queries';
 
 const mobileMenuVariants = {
   hidden: { opacity: 0, y: -10, pointerEvents: 'none' as const, height: 0 },
@@ -42,7 +44,12 @@ const linkVariants = {
 export default function Navbar() {
   const pathname = usePathname() || '/';
   const [isOpen, setIsOpen] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
   const disclosureRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    client.fetch(profileQuery).then(setProfile).catch(console.error);
+  }, []);
 
   // Close menu on scroll, but ignore scrolls for 200ms after opening
   useEffect(() => {
@@ -92,10 +99,14 @@ export default function Navbar() {
       ? 'block bg-teal-100 dark:bg-gray-800 text-teal-700 dark:text-teal-400 pl-3 pr-4 py-2 text-xl font-semibold rounded-md'
       : 'block text-gray-700 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 pl-3 pr-4 py-2 text-lg font-medium transition-colors duration-200 rounded-md';
 
+  const nameParts = (profile?.name || "Sayed Ali").split(" ");
+  const firstName = nameParts[0];
+  const lastName = nameParts.slice(1).join(" ");
+
   return (
     <Disclosure
       as="nav"
-      className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/70 shadow-[0_12px_40px_-30px_rgba(15,23,42,0.5)] backdrop-blur-xl dark:border-slate-800/60 dark:bg-slate-950/70 relative"
+      className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/70 shadow-[0_12px_40px_-30px_rgba(15,23,42,0.5)] backdrop-blur-xl dark:border-slate-800/60 dark:bg-slate-950/70"
       ref={disclosureRef}
       defaultOpen={false}
     >
@@ -106,7 +117,7 @@ export default function Navbar() {
               {/* Logo */}
               <Link href="/">
                 <h1 className="text-4xl font-extrabold cursor-pointer select-none tracking-tight">
-                  Sayed <span className="text-teal-500">Ali</span>
+                  {firstName} <span className="text-teal-500">{lastName}</span>
                 </h1>
               </Link>
 

@@ -14,40 +14,41 @@ import { SiNextdotjs } from "react-icons/si";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import ProfileWithBorder from "./ProfileWithBorder";
+import { client } from "../lib/sanity.client";
+import { skillsQuery, testimonialsQuery, profileQuery } from "../lib/sanity.queries";
+import { getDynamicIcon } from "../lib/icons";
 
 export default function Home() {
   const router = useRouter();
-
-  const skills = [
-    { name: "React", icon: <FaReact size={36} className="text-teal-500" /> },
-    { name: "Next.js", icon: <SiNextdotjs size={36} className="text-black" /> },
-    { name: "JavaScript", icon: <FaJsSquare size={36} className="text-yellow-400" /> },
-    { name: "Node.js", icon: <FaNodeJs size={36} className="text-green-600" /> },
-    { name: "CSS3", icon: <FaCss3Alt size={36} className="text-blue-600" /> },
-    { name: "HTML5", icon: <FaHtml5 size={36} className="text-orange-600" /> },
-    { name: "GitHub", icon: <FaGithub size={36} className="text-gray-800 dark:text-gray-300" /> },
-    { name: "NPM", icon: <FaNpm size={36} className="text-red-600" /> },
-  ];
-
-  const testimonials = [
-    {
-      quote: "Sayed is a phenomenal developer who always delivers clean and efficient code.",
-      author: "Jane Doe, Client",
-    },
-    {
-      quote: "His attention to detail and creative mindset are truly remarkable.",
-      author: "John Smith, Designer",
-    },
-    {
-      quote: "Always a pleasure to work with, and consistently exceeds expectations.",
-      author: "Sara Lee, Project Manager",
-    },
-  ];
-
+  const [skills, setSkills] = useState<any[]>([]);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [profile, setProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [skillsData, testimonialsData, profileData] = await Promise.all([
+          client.fetch(skillsQuery),
+          client.fetch(testimonialsQuery),
+          client.fetch(profileQuery),
+        ]);
+        setSkills(skillsData || []);
+        setTestimonials(testimonialsData || []);
+        setProfile(profileData);
+      } catch (error) {
+        console.error("Error fetching Sanity data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (testimonials.length === 0) return;
     const timer = setInterval(() => {
       setDirection(1);
       setIndex((prev) => (prev + 1) % testimonials.length);
@@ -76,16 +77,20 @@ export default function Home() {
       <section className="max-w-4xl mx-auto text-center space-y-6">
         <ProfileWithBorder />
         <h1 className="text-5xl font-extrabold tracking-tight">
-          Hi, I’m <span className="text-teal-500">Sayed Ali</span>
+          Hi, I’m <span className="text-teal-500">{profile?.name || "Sayed Ali"}</span>
         </h1>
         <p className="text-lg max-w-3xl mx-auto leading-relaxed">
           I’m a{" "}
-          <strong className="text-teal-500">Front-End Developer</strong>{" "}
-          specializing in{" "}
-          <span className="text-teal-500 font-semibold">Next.js</span>,{" "}
-          <span className="text-teal-500 font-semibold">React</span>, and{" "}
-          <span className="text-teal-500 font-semibold">Tailwind CSS</span>. I
-          build fast, accessible, and visually stunning web applications.
+          <strong className="text-teal-500">{profile?.role || "Front-End Developer"}</strong>{" "}
+          {profile?.bio || (
+            <>
+              specializing in{" "}
+              <span className="text-teal-500 font-semibold">Next.js</span>,{" "}
+              <span className="text-teal-500 font-semibold">React</span>, and{" "}
+              <span className="text-teal-500 font-semibold">Tailwind CSS</span>. I
+              build fast, accessible, and visually stunning web applications.
+            </>
+          )}
         </p>
         <div className="flex justify-center gap-6 flex-wrap pb-4">
           <button
@@ -103,15 +108,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Me */}
-      <section className="max-w-3xl mx-auto rounded-2xl border border-slate-200/70 bg-white/70 p-8 shadow-sm backdrop-blur dark:border-slate-800/60 dark:bg-slate-900/60 mb-12">
+      <section className="max-w-3xl mx-auto rounded-2xl border border-white/20 bg-white/10 p-8 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-black/20 mb-12">
         <h2 className="text-3xl font-bold mb-4 text-center">About Me</h2>
         <ul className="list-disc list-inside space-y-3 text-gray-700 dark:text-gray-300 text-lg">
-          <li>Passionate about writing <span className="text-teal-500 font-semibold">clean, maintainable code</span> that scales.</li>
-          <li>Experienced in creating <span className="text-teal-500 font-semibold">accessible</span> and performant web apps.</li>
-          <li>Constant learner who loves exploring <span className="text-teal-500 font-semibold">modern web technologies</span>.</li>
-          <li>Collaborative team player focused on <span className="text-teal-500 font-semibold">great UX/UI</span>.</li>
-          <li>I believe in <span className="text-teal-500 font-semibold">building for everyone</span> — inclusive design is key.</li>
+          {profile?.aboutMe ? (
+            profile.aboutMe.map((point: string, i: number) => (
+              <li key={i}>{point}</li>
+            ))
+          ) : (
+            <>
+              <li>Passionate about writing <span className="text-teal-500 font-semibold">clean, maintainable code</span> that scales.</li>
+              <li>Experienced in creating <span className="text-teal-500 font-semibold">accessible</span> and performant web apps.</li>
+              <li>Constant learner who loves exploring <span className="text-teal-500 font-semibold">modern web technologies</span>.</li>
+              <li>Collaborative team player focused on <span className="text-teal-500 font-semibold">great UX/UI</span>.</li>
+              <li>I believe in <span className="text-teal-500 font-semibold">building for everyone</span> — inclusive design is key.</li>
+            </>
+          )}
         </ul>
       </section>
 
@@ -119,15 +131,15 @@ export default function Home() {
       <section className="max-w-4xl mx-auto mb-12">
         <h2 className="text-3xl font-bold mb-6 text-center">My Skills</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-lg mx-auto">
-          {skills.map(({ name, icon }) => (
+          {skills.map((skill) => (
             <div
-              key={name}
-              className="flex flex-col items-center gap-2 rounded-xl border border-slate-200/60 bg-white/70 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800/60 dark:bg-slate-900/60"
+              key={skill._id}
+              className="flex flex-col items-center gap-2 rounded-xl border border-white/20 bg-white/10 p-4 shadow-sm backdrop-blur-md transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-black/20"
               tabIndex={0}
-              aria-label={name}
+              aria-label={skill.name}
             >
-              {icon}
-              <span className="text-lg font-semibold">{name}</span>
+              {getDynamicIcon(skill.iconName, skill.color)}
+              <span className="text-lg font-semibold">{skill.name}</span>
             </div>
           ))}
         </div>
@@ -137,39 +149,36 @@ export default function Home() {
       <section className="max-w-4xl mx-auto mb-12 text-center">
         <h2 className="text-3xl font-bold mb-6">Tech Stack</h2>
         <div className="flex justify-center flex-wrap gap-8">
-          {skills.map(({ name, icon }) => (
-            <div
-              key={name}
-              className="w-16 h-16 flex flex-col items-center justify-center filter grayscale hover:grayscale-0 transition"
-              aria-hidden="true"
-            >
-              {icon}
-              <p className="mt-2 text-sm">{name}</p>
-            </div>
+          {skills.map((skill) => (
+            <SkillIcon key={skill._id} skill={skill} getDynamicIcon={getDynamicIcon} />
           ))}
         </div>
       </section>
 
       {/* Testimonials with animation */}
-      <section className="max-w-3xl mx-auto mb-12 rounded-2xl border border-slate-200/70 bg-white/70 pt-8 shadow-sm backdrop-blur dark:border-slate-800/60 dark:bg-slate-900/60">
+      <section className="max-w-3xl mx-auto mb-12 rounded-2xl border border-white/20 bg-white/10 pt-8 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-black/20">
         <h2 className="text-3xl font-bold mb-6 text-center">Testimonials</h2>
         <div className="relative h-40 overflow-hidden">
-          <AnimatePresence initial={false} custom={direction}>
-            <motion.blockquote
-              key={index}
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="absolute w-full italic text-gray-600 dark:text-gray-400 text-center px-4"
-            >
-              “{testimonials[index].quote}”
-              <footer className="mt-4 font-semibold text-teal-500">
-                {testimonials[index].author}
-              </footer>
-            </motion.blockquote>
-          </AnimatePresence>
+          {testimonials.length > 0 ? (
+            <AnimatePresence initial={false} custom={direction}>
+              <motion.blockquote
+                key={index}
+                custom={direction}
+                variants={variants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="absolute w-full italic text-gray-600 dark:text-gray-400 text-center px-4"
+              >
+                “{testimonials[index].quote}”
+                <footer className="mt-4 font-semibold text-teal-500">
+                  {testimonials[index].author}
+                </footer>
+              </motion.blockquote>
+            </AnimatePresence>
+          ) : (
+            <p className="text-center text-gray-500">No testimonials yet.</p>
+          )}
         </div>
       </section>
 
@@ -181,5 +190,30 @@ export default function Home() {
         </p>
       </footer> */}
     </main>
+  );
+}
+
+function SkillIcon({ skill, getDynamicIcon }: { skill: any; getDynamicIcon: any }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="w-16 h-16 flex flex-col items-center justify-center transition-all duration-300"
+      aria-hidden="true"
+    >
+      <div className={`transition-all duration-300 ${isHovered ? "scale-110" : "grayscale opacity-70"}`}>
+        {getDynamicIcon(skill.iconName, isHovered ? skill.color : undefined)}
+      </div>
+      <p
+        className={`mt-2 text-sm transition-colors duration-300 ${
+          isHovered ? "font-medium text-opacity-100" : "text-gray-500"
+        }`}
+        style={isHovered ? { color: skill.color || "#14b8a6" } : {}}
+      >
+        {skill.name}
+      </p>
+    </div>
   );
 }
