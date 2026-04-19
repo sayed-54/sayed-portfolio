@@ -8,6 +8,7 @@
     width: 0%;
     left: 50%;
   }
+
   100% {
     width: 100%;
     left: 0%;
@@ -40,6 +41,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -67,11 +69,9 @@
   box-shadow: 0 0 12px rgba(20, 184, 166, 0.4);
   transition: all 0.4s ease;
 
-  background: repeating-conic-gradient(
-    from 0deg,
-    #14b8a6 0deg 60deg,
-    transparent 60deg 90deg
-  );
+  background: repeating-conic-gradient(from 0deg,
+      #14b8a6 0deg 60deg,
+      transparent 60deg 90deg);
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black 100%);
   mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black 100%);
 }
@@ -80,11 +80,9 @@
 .rotating-border-wrapper:hover .rotating-border {
   animation-play-state: paused;
   box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
-  background: repeating-conic-gradient(
-    from 0deg,
-    #8b5cf6 0deg 60deg,
-    transparent 60deg 90deg
-  );
+  background: repeating-conic-gradient(from 0deg,
+      #8b5cf6 0deg 60deg,
+      transparent 60deg 90deg);
 }
 
 /* ====== Image inside border ====== */
@@ -107,28 +105,26 @@
 /* ====== Dark mode ====== */
 @media (prefers-color-scheme: dark) {
   .rotating-border {
-    background: repeating-conic-gradient(
-      from 0deg,
-      #5eead4 0deg 60deg,
-      transparent 60deg 90deg
-    );
+    background: repeating-conic-gradient(from 0deg,
+        #5eead4 0deg 60deg,
+        transparent 60deg 90deg);
     box-shadow: 0 0 12px rgba(94, 234, 212, 0.4);
   }
 
   .rotating-border-wrapper:hover .rotating-border {
     box-shadow: 0 0 20px rgba(196, 181, 253, 0.8);
-    background: repeating-conic-gradient(
-      from 0deg,
-      #c4b5fd 0deg 60deg,
-      transparent 60deg 90deg
-    );
+    background: repeating-conic-gradient(from 0deg,
+        #c4b5fd 0deg 60deg,
+        transparent 60deg 90deg);
   }
 }
+
 @keyframes fade-in {
   from {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -167,11 +163,12 @@
     transform: translate3d(0, 0, 0) scale(1);
     background-position: 0% 50%;
   }
+
   50% {
-    transform: translate3d(0, calc(var(--aurora-amplitude, 1.7) * -24px), 0)
-      scale(1.12);
+    transform: translate3d(0, calc(var(--aurora-amplitude, 1.7) * -24px), 0) scale(1.12);
     background-position: 100% 50%;
   }
+
   100% {
     transform: translate3d(0, 0, 0) scale(1);
     background-position: 0% 50%;
@@ -183,13 +180,121 @@
     transform: translate3d(0, 0, 0) scale(1.05);
     background-position: 50% 0%;
   }
+
   50% {
-    transform: translate3d(0, calc(var(--aurora-amplitude, 1.7) * 18px), 0)
-      scale(1.18);
+    transform: translate3d(0, calc(var(--aurora-amplitude, 1.7) * 18px), 0) scale(1.18);
     background-position: 50% 100%;
   }
+
   100% {
     transform: translate3d(0, 0, 0) scale(1.05);
     background-position: 50% 0%;
   }
+}
+
+/* ====== FloatingLines – static CSS fallback ============================== */
+/*
+  Shown immediately on page load (before WebGL canvas mounts) and on
+  devices where WebGL fails. Pure CSS gradient – zero GPU cost.
+*/
+.floating-lines-bg-fallback {
+  background: radial-gradient(ellipse 120% 80% at 60% 40%,
+      rgba(233, 69, 245, 0.12) 0%,
+      rgba(47, 75, 192, 0.10) 40%,
+      transparent 70%);
+}
+
+/* ====== Reduced-motion: no continuous animation on the canvas ============ */
+@media (prefers-reduced-motion: reduce) {
+  .floating-lines-container canvas {
+    animation: none !important;
+  }
+}
+
+/* ====== Light-mode typography enhancement ================================ */
+/*
+  In light mode the glassmorphism card sits on a bright background, causing
+  text to look washed-out / low-opacity grey. These rules:
+    1. Force headings to near-black with a subtle luminous text-shadow
+    2. Boost body / paragraph text to a solid dark grey
+    3. Add a faint glow to h1 for that premium "lit" feeling
+  All rules are scoped to :not(.dark) so dark mode is untouched.
+*/
+
+/* ── Headings: crisp black + soft glow ─────────────────────────────────── */
+:root:not(.dark) h1,
+:root:not(.dark) h2,
+:root:not(.dark) h3 {
+  color: #0f172a;
+  /* slate-900 */
+  text-shadow:
+    0 0 1px rgba(15, 23, 42, 0.08),
+    /* tight crisp edge */
+    0 1px 3px rgba(15, 23, 42, 0.06);
+  /* soft lift */
+}
+
+/* Hero h1 gets a slightly stronger glow to feel "expensive" */
+:root:not(.dark) h1 {
+  text-shadow:
+    0 0 1px rgba(15, 23, 42, 0.10),
+    0 1px 6px rgba(20, 184, 166, 0.10),
+    /* teal tint glow */
+    0 2px 12px rgba(15, 23, 42, 0.04);
+}
+
+/* ── Body text: solid dark grey instead of faded ─────────────────────── */
+:root:not(.dark) p,
+:root:not(.dark) li,
+:root:not(.dark) span,
+:root:not(.dark) footer,
+:root:not(.dark) blockquote {
+  color: #1e293b;
+  /* slate-800 */
+}
+
+/* Ensure list items and paragraphs with explicit gray classes get boosted */
+:root:not(.dark) .text-gray-700 {
+  color: #1e293b !important;
+  /* slate-800 */
+}
+
+:root:not(.dark) .text-gray-600 {
+  color: #334155 !important;
+  /* slate-700 */
+}
+
+:root:not(.dark) .text-gray-500 {
+  color: #475569 !important;
+  /* slate-600 */
+}
+
+/* ── Skill / tech names: readable, not invisible ─────────────────────── */
+:root:not(.dark) .text-lg.font-semibold {
+  color: #0f172a;
+}
+
+/* ── Teal accent stays vibrant ─────────────────────────────────────────── */
+:root:not(.dark) .text-teal-500 {
+  color: #0d9488 !important;
+  /* slightly deeper for contrast */
+  text-shadow: 0 0 8px rgba(20, 184, 166, 0.15);
+  /* subtle teal glow */
+}
+
+/* ── Tech Stack / Skill labels (Global Size & Weight Boost) ────────────── */
+.tech-stack-label {
+  font-size: 1rem !important;                      /* 16px (+2px from text-sm) */
+  font-weight: 700 !important;                     /* bolder weight */
+}
+
+/* Ensure legible dark color inside the light mode card */
+:root:not(.dark) .tech-stack-label {
+  color: #1e293b;
+}
+
+/* Prevent white icons (like GitHub) from vanishing on hover in light mode */
+:root:not(.dark) .tech-stack-icon svg[style*="#ffffff"],
+:root:not(.dark) .tech-stack-icon svg[style*="#FFFFFF"] {
+  color: #0f172a !important;                       /* Force dark slate instead of white */
 }

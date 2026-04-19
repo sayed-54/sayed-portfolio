@@ -108,9 +108,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="max-w-3xl mx-auto rounded-2xl border border-white/20 bg-white/10 p-8 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-black/20 mb-12">
+      <section className="max-w-3xl mx-auto rounded-2xl border border-white/20 bg-white/50 p-8 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-black/20 mb-12">
         <h2 className="text-3xl font-bold mb-4 text-center">About Me</h2>
-        <ul className="list-disc list-inside space-y-3 text-gray-700 dark:text-gray-300 text-lg">
+        <ul className="list-disc list-inside space-y-3 text-gray-800 dark:text-gray-300 text-lg">
           {profile?.aboutMe ? (
             profile.aboutMe.map((point: string, i: number) => (
               <li key={i}>{point}</li>
@@ -134,7 +134,7 @@ export default function Home() {
           {skills.map((skill) => (
             <div
               key={skill._id}
-              className="flex flex-col items-center gap-2 rounded-xl border border-white/20 bg-white/10 p-4 shadow-sm backdrop-blur-md transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-black/20"
+              className="flex flex-col items-center gap-2 rounded-xl border border-white/20 bg-white/40 p-4 shadow-sm backdrop-blur-md transition hover:-translate-y-0.5 hover:shadow-md dark:border-white/10 dark:bg-black/20"
               tabIndex={0}
               aria-label={skill.name}
             >
@@ -156,7 +156,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials with animation */}
-      <section className="max-w-3xl mx-auto mb-12 rounded-2xl border border-white/20 bg-white/10 pt-8 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-black/20">
+      <section className="max-w-3xl mx-auto mb-12 rounded-2xl border border-white/20 bg-white/40 pt-8 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-black/20">
         <h2 className="text-3xl font-bold mb-6 text-center">Testimonials</h2>
         <div className="relative h-40 overflow-hidden">
           {testimonials.length > 0 ? (
@@ -203,13 +203,12 @@ function SkillIcon({ skill, getDynamicIcon }: { skill: any; getDynamicIcon: any 
       className="w-16 h-16 flex flex-col items-center justify-center transition-all duration-300"
       aria-hidden="true"
     >
-      <div className={`transition-all duration-300 ${isHovered ? "scale-110" : "grayscale opacity-70"}`}>
+      <div className={`tech-stack-icon transition-all duration-300 ${isHovered ? "scale-110" : "grayscale opacity-70"}`}>
         {getDynamicIcon(skill.iconName, isHovered ? skill.color : undefined)}
       </div>
       <p
-        className={`mt-2 text-sm transition-colors duration-300 ${
-          isHovered ? "font-medium text-opacity-100" : "text-gray-500"
-        }`}
+        className={`mt-2 text-sm transition-colors duration-300 tech-stack-label ${isHovered ? "font-medium text-opacity-100" : "text-gray-500"
+          }`}
         style={isHovered ? { color: skill.color || "#14b8a6" } : {}}
       >
         {skill.name}
