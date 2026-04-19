@@ -14,7 +14,7 @@ import { SiNextdotjs } from "react-icons/si";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import ProfileWithBorder from "./ProfileWithBorder";
-import { client } from "../lib/sanity.client";
+import { client, urlFor } from "../lib/sanity.client";
 import { skillsQuery, testimonialsQuery, profileQuery } from "../lib/sanity.queries";
 import { getDynamicIcon } from "../lib/icons";
 
@@ -75,7 +75,7 @@ export default function Home() {
   return (
     <main className="min-h-screen py-8 sm:py-10 text-slate-900 dark:text-slate-100">
       <section className="max-w-4xl mx-auto text-center space-y-6">
-        <ProfileWithBorder />
+        <ProfileWithBorder imageUrl={profile?.image ? urlFor(profile.image).url() : undefined} />
         <h1 className="text-5xl font-extrabold tracking-tight">
           Hi, I’m <span className="text-teal-500">{profile?.name || "Sayed Ali"}</span>
         </h1>

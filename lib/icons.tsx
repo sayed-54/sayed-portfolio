@@ -18,6 +18,14 @@ export const getDynamicIcon = (iconName: string, color?: string, size: number = 
   }
 
   if (IconComponent) {
+    if (iconName === 'FaGithub') {
+      return (
+        <IconComponent
+          size={size}
+          className="text-slate-900 dark:text-slate-100"
+        />
+      );
+    }
     return (
       <IconComponent
         size={size}

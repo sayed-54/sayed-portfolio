@@ -31,7 +31,8 @@ export const profileQuery = groq`
     name,
     role,
     bio,
-    aboutMe
+    aboutMe,
+    image
   }
 `;
 

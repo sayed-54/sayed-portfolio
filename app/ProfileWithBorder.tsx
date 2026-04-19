@@ -2,7 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import pfpcollege from "../public/pfp college.png"; // adjust as needed
 
-export default function ProfilePicture() {
+export default function ProfilePicture({ imageUrl }: { imageUrl?: string }) {
   const [clicked, setClicked] = useState(false);
 
   return (
@@ -12,7 +12,7 @@ export default function ProfilePicture() {
     >
       <div className="rotating-border"></div>
       <Image
-        src={pfpcollege}
+        src={imageUrl || pfpcollege}
         alt="Sayed Ali"
         width={500}
         height={500}
