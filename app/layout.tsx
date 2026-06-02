@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Syne, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Providers from "./components/Providers";
@@ -13,11 +13,46 @@ const FloatingLines = dynamic(() => import("./components/FloatingLines"), {
   loading: () => null, // canvas mounts client-side; no LCP impact
 });
 
-const inter = Inter({ subsets: ["latin"] });
+// Display font — bold, geometric, premium feel for headings
+const syne = Syne({
+  subsets: ["latin"],
+  variable: "--font-syne",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+// Body font — clean, modern, highly readable
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Sayed Ali",
-  description: "My own developed portfolio using Next.js",
+  title: "Sayed Ali — Front-End Developer",
+  description: "Front-End Developer specializing in Next.js, React & Tailwind CSS. I build fast, accessible, and visually stunning web applications.",
+  keywords: ["Sayed Ali", "Front-End Developer", "Next.js", "React", "Tailwind CSS", "Web Developer", "Portfolio"],
+  authors: [{ name: "Sayed Ali" }],
+  creator: "Sayed Ali",
+  openGraph: {
+    title: "Sayed Ali — Front-End Developer",
+    description: "Front-End Developer specializing in Next.js, React & Tailwind CSS. I build fast, accessible, and visually stunning web applications.",
+    url: "https://sayed-portfolio.vercel.app",
+    siteName: "Sayed Ali Portfolio",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sayed Ali — Front-End Developer",
+    description: "Front-End Developer specializing in Next.js, React & Tailwind CSS.",
+    creator: "@Urfav1Slayer",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} bg-white text-black dark:bg-[#030303] dark:text-white h-full selection:bg-gray-300 dark:selection:bg-gray-300/15`}
+        className={`${syne.variable} ${dmSans.variable} font-sans bg-white text-black dark:bg-[#0a0a0f] dark:text-white h-full selection:bg-teal-200/60 dark:selection:bg-teal-500/20`}
       >
         <Providers>
           <Navbar />
@@ -43,27 +78,16 @@ export default function RootLayout({
                   • lineCount reduced further (biggest single win)
                   • interactive / parallax off on mobile (handled inside component)
               */}
-              <FloatingLines
-                linesGradient={["#E945F5", "#2F4BC0", "#E945F5", "#ffffff", "#f00a0a"]}
-                lineCount={[4, 4, 3]}
-                animationSpeed={0.85}
-                interactive
-                bendRadius={5}
-                bendStrength={-0.5}
-                mouseDamping={0.03}
-                parallax
-                parallaxStrength={0.35}
-                maxPixelRatio={1.5}
-                maxFPS={45}
-              />
+              
             </div>
 
             <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-20">
-              <div className="rounded-3xl border border-white/20 bg-white/40 p-6 text-gray-900 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] backdrop-blur-xl dark:border-white/10 dark:bg-black/40 dark:text-slate-100 sm:p-8">
+              <div className="rounded-3xl border border-white/20 bg-white/40 p-6 text-gray-900 shadow-glass backdrop-blur-xl dark:border-white/10 dark:bg-black/40 dark:text-slate-100 sm:p-8">
                 {children}
               </div>
             </main>
             <Footer />
+            {/* Floating WhatsApp CTA — globally available on all pages */}
           </div>
         </Providers>
       </body>

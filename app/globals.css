@@ -2,17 +2,102 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ====== Underline animation ====== */
-@keyframes underline-grow {
-  0% {
-    width: 0%;
-    left: 50%;
-  }
+/* ================================================================
+   CSS CUSTOM PROPERTIES — Design Token Layer
+   ================================================================ */
+:root {
+  --brand-primary:  #14b8a6;
+  --brand-glow:     #2dd4bf;
+  --brand-muted:    #0f766e;
 
-  100% {
-    width: 100%;
-    left: 0%;
-  }
+  --font-display:   var(--font-syne, system-ui);
+  --font-body:      var(--font-dm-sans, system-ui);
+
+  --radius-sm:      0.5rem;
+  --radius-md:      1rem;
+  --radius-lg:      1.5rem;
+  --radius-xl:      2rem;
+
+  /* Shadow scale — all tinted with brand teal hue */
+  --shadow-brand-sm: 0 4px 24px rgba(20, 184, 166, 0.12);
+  --shadow-brand:    0 8px 32px rgba(20, 184, 166, 0.25);
+  --shadow-brand-lg: 0 0 40px rgba(20, 184, 166, 0.40);
+  --shadow-glass:    0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+/* ================================================================
+   BASE — Typography system
+   ================================================================ */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+/* Display headings use Syne — bold, geometric, premium */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+/* ================================================================
+   GRAIN / NOISE OVERLAY
+   Fixed, pointer-events-none — breaks digital sterility
+   ================================================================ */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* ================================================================
+   SPOTLIGHT CARD SYSTEM
+   The card border lights up under the cursor via JS
+   ================================================================ */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(20, 184, 166, 0.20),
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+/* ================================================================
+   NAV UNDERLINE ANIMATION
+   ================================================================ */
+@keyframes underline-grow {
+  0%   { width: 0%;   left: 50%; }
+  100% { width: 100%; left: 0%;  }
 }
 
 .nav-underline {
@@ -27,7 +112,7 @@
   bottom: -2px;
   left: 50%;
   height: 2px;
-  background-color: #14b8a6;
+  background-color: var(--brand-primary);
   width: 0%;
   transition: all 0.3s ease-in-out;
 }
@@ -36,18 +121,15 @@
   animation: underline-grow 0.3s forwards;
 }
 
-/* ====== Spin animation ====== */
+/* ================================================================
+   ROTATING PROFILE BORDER
+   Upgraded to multi-color conic gradient
+   ================================================================ */
 @keyframes spin-border {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-/* ====== Wrapper ====== */
 .rotating-border-wrapper {
   position: relative;
   width: 14rem;
@@ -56,7 +138,6 @@
   cursor: pointer;
 }
 
-/* ====== Simulated dashed border with conic-gradient ====== */
 .rotating-border {
   position: absolute;
   top: -12px;
@@ -66,26 +147,33 @@
   border-radius: 9999px;
   z-index: 1;
   animation: spin-border 20s linear infinite;
-  box-shadow: 0 0 12px rgba(20, 184, 166, 0.4);
-  transition: all 0.4s ease;
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.5), 0 0 32px rgba(20, 184, 166, 0.2);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
-  background: repeating-conic-gradient(from 0deg,
-      #14b8a6 0deg 60deg,
-      transparent 60deg 90deg);
+  background: repeating-conic-gradient(
+    from 0deg,
+    #14b8a6 0deg 40deg,
+    #2563eb 40deg 80deg,
+    transparent 80deg 120deg
+  );
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black 100%);
-  mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black 100%);
+          mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black 100%);
 }
 
-/* Pause animation and glow on hover + color shift */
 .rotating-border-wrapper:hover .rotating-border {
   animation-play-state: paused;
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
-  background: repeating-conic-gradient(from 0deg,
-      #8b5cf6 0deg 60deg,
-      transparent 60deg 90deg);
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.8), 0 0 48px rgba(168, 85, 247, 0.3);
+  background: repeating-conic-gradient(
+    from 0deg,
+    #a855f7 0deg 40deg,
+    #14b8a6 40deg 80deg,
+    transparent 80deg 120deg
+  );
 }
 
-/* ====== Image inside border ====== */
+/* ================================================================
+   PROFILE IMAGE
+   ================================================================ */
 .profile-image {
   position: relative;
   z-index: 10;
@@ -94,48 +182,38 @@
   height: 100%;
   object-fit: cover;
   object-position: top;
-  transition: transform 0.4s ease;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Zoom effect on hover */
 .rotating-border-wrapper:hover .profile-image {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
-/* ====== Dark mode ====== */
-@media (prefers-color-scheme: dark) {
-  .rotating-border {
-    background: repeating-conic-gradient(from 0deg,
-        #5eead4 0deg 60deg,
-        transparent 60deg 90deg);
-    box-shadow: 0 0 12px rgba(94, 234, 212, 0.4);
-  }
-
-  .rotating-border-wrapper:hover .rotating-border {
-    box-shadow: 0 0 20px rgba(196, 181, 253, 0.8);
-    background: repeating-conic-gradient(from 0deg,
-        #c4b5fd 0deg 60deg,
-        transparent 60deg 90deg);
-  }
-}
-
+/* ================================================================
+   FADE / SLIDE ANIMATIONS
+   ================================================================ */
 @keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
-.animate-fade-in {
-  animation: fade-in 0.5s ease-out;
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
-/* ====== Aurora background ====== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+.animate-fade-in  { animation: fade-in 0.5s ease-out; }
+.animate-slide-up { animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-float    { animation: float 6s ease-in-out infinite; }
+
+/* ================================================================
+   AURORA BACKGROUND
+   ================================================================ */
 .aurora {
   position: absolute;
   inset: 0;
@@ -159,142 +237,167 @@
 }
 
 @keyframes aurora-shift {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-    background-position: 0% 50%;
-  }
-
-  50% {
-    transform: translate3d(0, calc(var(--aurora-amplitude, 1.7) * -24px), 0) scale(1.12);
-    background-position: 100% 50%;
-  }
-
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-    background-position: 0% 50%;
-  }
+  0%   { transform: translate3d(0, 0, 0) scale(1);    background-position: 0% 50%; }
+  50%  { transform: translate3d(0, calc(var(--aurora-amplitude, 1.7) * -24px), 0) scale(1.12); background-position: 100% 50%; }
+  100% { transform: translate3d(0, 0, 0) scale(1);    background-position: 0% 50%; }
 }
 
 @keyframes aurora-drift {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1.05);
-    background-position: 50% 0%;
-  }
-
-  50% {
-    transform: translate3d(0, calc(var(--aurora-amplitude, 1.7) * 18px), 0) scale(1.18);
-    background-position: 50% 100%;
-  }
-
-  100% {
-    transform: translate3d(0, 0, 0) scale(1.05);
-    background-position: 50% 0%;
-  }
+  0%   { transform: translate3d(0, 0, 0) scale(1.05);  background-position: 50% 0%; }
+  50%  { transform: translate3d(0, calc(var(--aurora-amplitude, 1.7) * 18px), 0) scale(1.18); background-position: 50% 100%; }
+  100% { transform: translate3d(0, 0, 0) scale(1.05);  background-position: 50% 0%; }
 }
 
-/* ====== FloatingLines – static CSS fallback ============================== */
-/*
-  Shown immediately on page load (before WebGL canvas mounts) and on
-  devices where WebGL fails. Pure CSS gradient – zero GPU cost.
-*/
+/* ================================================================
+   FLOATING LINES — CSS FALLBACK (pre-WebGL / WebGL failure)
+   Shifted to brand-harmonious teal-blue gradient
+   ================================================================ */
 .floating-lines-bg-fallback {
-  background: radial-gradient(ellipse 120% 80% at 60% 40%,
-      rgba(233, 69, 245, 0.12) 0%,
-      rgba(47, 75, 192, 0.10) 40%,
-      transparent 70%);
+  background: radial-gradient(
+    ellipse 120% 80% at 60% 40%,
+    rgba(20, 184, 166, 0.10) 0%,
+    rgba(37, 99, 235, 0.08) 40%,
+    transparent 70%
+  );
 }
 
-/* ====== Reduced-motion: no continuous animation on the canvas ============ */
+/* ================================================================
+   REDUCED MOTION — always respect user preference
+   ================================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .floating-lines-container canvas {
-    animation: none !important;
-  }
+  .floating-lines-container canvas { animation: none !important; }
+  .rotating-border                 { animation: none !important; }
+  .aurora-layer                    { animation: none !important; }
+  .animate-float                   { animation: none !important; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
-/* ====== Light-mode typography enhancement ================================ */
-/*
-  In light mode the glassmorphism card sits on a bright background, causing
-  text to look washed-out / low-opacity grey. These rules:
-    1. Force headings to near-black with a subtle luminous text-shadow
-    2. Boost body / paragraph text to a solid dark grey
-    3. Add a faint glow to h1 for that premium "lit" feeling
-  All rules are scoped to :not(.dark) so dark mode is untouched.
-*/
-
-/* ── Headings: crisp black + soft glow ─────────────────────────────────── */
+/* ================================================================
+   LIGHT MODE — Typography & Contrast Enhancement
+   ================================================================ */
 :root:not(.dark) h1,
 :root:not(.dark) h2,
 :root:not(.dark) h3 {
-  color: #0f172a;
-  /* slate-900 */
+  color: #0f172a; /* slate-900 */
   text-shadow:
     0 0 1px rgba(15, 23, 42, 0.08),
-    /* tight crisp edge */
     0 1px 3px rgba(15, 23, 42, 0.06);
-  /* soft lift */
 }
 
-/* Hero h1 gets a slightly stronger glow to feel "expensive" */
 :root:not(.dark) h1 {
   text-shadow:
     0 0 1px rgba(15, 23, 42, 0.10),
-    0 1px 6px rgba(20, 184, 166, 0.10),
-    /* teal tint glow */
+    0 1px 6px rgba(20, 184, 166, 0.12),
     0 2px 12px rgba(15, 23, 42, 0.04);
 }
 
-/* ── Body text: solid dark grey instead of faded ─────────────────────── */
 :root:not(.dark) p,
 :root:not(.dark) li,
 :root:not(.dark) span,
 :root:not(.dark) footer,
 :root:not(.dark) blockquote {
-  color: #1e293b;
-  /* slate-800 */
+  color: #1e293b; /* slate-800 */
 }
 
-/* Ensure list items and paragraphs with explicit gray classes get boosted */
-:root:not(.dark) .text-gray-700 {
-  color: #1e293b !important;
-  /* slate-800 */
-}
+:root:not(.dark) .text-gray-700 { color: #1e293b !important; }
+:root:not(.dark) .text-gray-600 { color: #334155 !important; }
+:root:not(.dark) .text-gray-500 { color: #475569 !important; }
+:root:not(.dark) .text-lg.font-semibold { color: #0f172a; }
 
-:root:not(.dark) .text-gray-600 {
-  color: #334155 !important;
-  /* slate-700 */
-}
-
-:root:not(.dark) .text-gray-500 {
-  color: #475569 !important;
-  /* slate-600 */
-}
-
-/* ── Skill / tech names: readable, not invisible ─────────────────────── */
-:root:not(.dark) .text-lg.font-semibold {
-  color: #0f172a;
-}
-
-/* ── Teal accent stays vibrant ─────────────────────────────────────────── */
 :root:not(.dark) .text-teal-500 {
   color: #0d9488 !important;
-  /* slightly deeper for contrast */
   text-shadow: 0 0 8px rgba(20, 184, 166, 0.15);
-  /* subtle teal glow */
 }
 
-/* ── Tech Stack / Skill labels (Global Size & Weight Boost) ────────────── */
+/* ================================================================
+   TECH STACK LABELS
+   ================================================================ */
 .tech-stack-label {
-  font-size: 1rem !important;                      /* 16px (+2px from text-sm) */
-  font-weight: 700 !important;                     /* bolder weight */
+  font-size: 1rem !important;
+  font-weight: 700 !important;
 }
 
-/* Ensure legible dark color inside the light mode card */
-:root:not(.dark) .tech-stack-label {
-  color: #1e293b;
-}
+:root:not(.dark) .tech-stack-label { color: #1e293b; }
 
-/* Prevent white icons (like GitHub) from vanishing on hover in light mode */
+/* Prevent white icons from vanishing on hover in light mode */
 :root:not(.dark) .tech-stack-icon svg[style*="#ffffff"],
 :root:not(.dark) .tech-stack-icon svg[style*="#FFFFFF"] {
-  color: #0f172a !important;                       /* Force dark slate instead of white */
+  color: #0f172a !important;
+}
+
+/* ================================================================
+   STATUS BADGE — "Available for work"
+   ================================================================ */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.6; transform: scale(1.4); }
+}
+
+.status-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* ================================================================
+   SCROLL REVEAL — base state (overridden by Framer Motion)
+   ================================================================ */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* ================================================================
+   3D CANVAS CONTAINER
+   ================================================================ */
+.hero-canvas-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .hero-canvas-container {
+    opacity: 0.7;
+  }
+}
+
+/* ================================================================
+   STATS BAR
+   ================================================================ */
+.stat-number {
+  font-family: var(--font-display);
+  font-feature-settings: "tnum"; /* tabular numbers */
+}
+
+/* ================================================================
+   FEATURE CARDS (About Me bento grid)
+   ================================================================ */
+.feature-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-brand);
+}
+
+/* ================================================================
+   MARQUEE TICKER — Tech Stack
+   ================================================================ */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee-left 30s linear infinite;
+  width: max-content;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
 }
